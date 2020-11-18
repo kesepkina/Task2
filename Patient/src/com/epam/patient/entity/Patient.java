@@ -2,37 +2,47 @@ package com.epam.patient.entity;
 
 import com.epam.patient.exception.ValidationException;
 
+import java.util.EnumSet;
 import java.util.Objects;
 
 public class Patient {
+    private static int counter = 1;
+
     private final int id;
+    {
+        id = counter;
+        counter++;
+    }
+
     private String lastName;
     private String firstName;
     private String patronymic;
     private String address;
     private String phoneNumber;
     private int numberOfMedicalRecord;
-    private String diagnosis;
+    private EnumSet<Diagnosis> diagnoses = EnumSet.noneOf(Diagnosis.class);
 
-    public Patient(int id, String lastName, String firstName, String patronymic, String address,
-                   String phoneNumber, int numberOfMedicalRecord, String diagnosis) throws ValidationException {
+
+    public Patient(String lastName, String firstName, String patronymic, String address,
+                   String phoneNumber, int numberOfMedicalRecord, Diagnosis... diagnoses) throws ValidationException {
         if (!checkPhoneNumber(phoneNumber)) {
             throw new ValidationException("wrong phoneNumber");
         }
         if (!checkNumberOfMedicalRecord(numberOfMedicalRecord)){
             throw new ValidationException("wrong number of medical record");
         }
-        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.numberOfMedicalRecord = numberOfMedicalRecord;
-        this.diagnosis = diagnosis;
+        for(Diagnosis diagnosis:diagnoses){
+            this.diagnoses.add(diagnosis);
+        }
     }
 
-    public Patient(int id, String lastName, String firstName, String patronymic, String address,
+    public Patient(String lastName, String firstName, String patronymic, String address,
                    String phoneNumber, int numberOfMedicalRecord) throws ValidationException {
         if (!checkPhoneNumber(phoneNumber)) {
             throw new ValidationException("wrong phoneNumber");
@@ -40,14 +50,12 @@ public class Patient {
         if (!checkNumberOfMedicalRecord(numberOfMedicalRecord)){
             throw new ValidationException("wrong number of medical record");
         }
-        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.numberOfMedicalRecord = numberOfMedicalRecord;
-        this.diagnosis = null;
     }
 
     private boolean checkPhoneNumber(String phoneNumber) {
@@ -110,12 +118,12 @@ public class Patient {
         this.numberOfMedicalRecord = numberOfMedicalRecord;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
+    public EnumSet<Diagnosis> getDiagnoses() {
+        return diagnoses;
     }
 
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setDiagnoses(EnumSet<Diagnosis> diagnoses) {
+        this.diagnoses = diagnoses;
     }
 
     @Override
@@ -130,12 +138,12 @@ public class Patient {
                 Objects.equals(patronymic, patient.patronymic) &&
                 Objects.equals(address, patient.address) &&
                 Objects.equals(phoneNumber, patient.phoneNumber) &&
-                Objects.equals(diagnosis, patient.diagnosis);
+                Objects.equals(diagnoses, patient.diagnoses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firstName, patronymic, address, phoneNumber, numberOfMedicalRecord, diagnosis);
+        return Objects.hash(id, lastName, firstName, patronymic, address, phoneNumber, numberOfMedicalRecord, diagnoses);
     }
 
     @Override
@@ -148,7 +156,7 @@ public class Patient {
         sb.append(", address='").append(address).append('\'');
         sb.append(", phoneNumber='").append(phoneNumber).append('\'');
         sb.append(", numberOfMedicalRecord=").append(numberOfMedicalRecord);
-        sb.append(", diagnosis='").append(diagnosis).append('\'');
+        sb.append(", diagnoses=").append(diagnoses);
         sb.append('}');
         return sb.toString();
     }

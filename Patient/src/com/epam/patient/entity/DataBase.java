@@ -11,7 +11,8 @@ public class DataBase {
     }
 
     public DataBase(List<Patient> patients) {
-        this.patients = patients;
+        this.patients = new ArrayList<>();
+        this.patients.addAll(patients);
     }
 
     public DataBase addPatient(Patient newPatient){

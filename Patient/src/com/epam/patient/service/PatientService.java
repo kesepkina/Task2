@@ -1,30 +1,34 @@
 package com.epam.patient.service;
 
 import com.epam.patient.entity.DataBase;
+import com.epam.patient.entity.Diagnosis;
 import com.epam.patient.entity.Patient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PatientService {
 
     public Patient findPatientById(DataBase dataBase, int id) {
         List<Patient> allPatients = dataBase.getPatients();
-        for (Patient patient : allPatients) {
-            if (patient.getId() == id) {
-                return patient;
+        Patient patient = null;
+        int i = 0;
+        while (i < allPatients.size()) {
+            if (allPatients.get(i).getId() == id) {
+                patient = allPatients.get(i);
+                break;
             }
+            i++;
         }
-        return null;
+        return Optional.ofNullable(patient).orElseThrow(NoSuchElementException::new);
     }
 
-    public List<Patient> findAllByDiagnosis(DataBase dataBase, String diagnosis) {
+    public List<Patient> findAllByDiagnosis(DataBase dataBase, Diagnosis diagnosis) {
         List<Patient> desiredPatients = new ArrayList<>();
         List<Patient> allPatients = dataBase.getPatients();
-        String patientDiagnosis;
+        EnumSet<Diagnosis> patientDiagnoses;
         for (Patient patient : allPatients) {
-            patientDiagnosis = patient.getDiagnosis();
-            if (patientDiagnosis != null && patientDiagnosis.equals(diagnosis)) {
+            patientDiagnoses = patient.getDiagnoses();
+            if (!patientDiagnoses.isEmpty() && patientDiagnoses.contains(diagnosis)) {
                 desiredPatients.add(patient);
             }
         }
@@ -51,7 +55,7 @@ public class PatientService {
         int count = 0;
         List<Patient> allPatients = dataBase.getPatients();
         for (Patient patient : allPatients) {
-            if (patient.getDiagnosis() == null) {
+            if (patient.getDiagnoses().isEmpty()) {
                 count++;
             }
         }

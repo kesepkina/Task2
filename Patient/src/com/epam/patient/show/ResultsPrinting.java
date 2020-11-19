@@ -14,7 +14,7 @@ public class ResultsPrinting {
     }
 
     public void printAllPatients(List<Patient> patients) {
-        System.out.println("All patients in database:");
+        System.out.println("All patients in hospital:");
         printListOfPatients(patients);
     }
 

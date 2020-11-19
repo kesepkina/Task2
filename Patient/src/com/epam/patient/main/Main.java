@@ -1,6 +1,6 @@
 package com.epam.patient.main;
 
-import com.epam.patient.entity.DataBase;
+import com.epam.patient.entity.Hospital;
 import com.epam.patient.entity.Diagnosis;
 import com.epam.patient.entity.Patient;
 import com.epam.patient.exception.ValidationException;
@@ -8,10 +8,12 @@ import com.epam.patient.service.PatientService;
 import com.epam.patient.show.ResultsPrinting;
 
 public class Main {
-    public static void main(String args[]) {
-        DataBase dataBase = new DataBase();
+    public static void main(String[] args) {
+
+
+        Hospital hospital = new Hospital();
         try {
-            dataBase.addPatient(new Patient("Bobrov", "Igor", "Mihaylovich", "Nezavisimosti 120, 12",
+            hospital.addPatient(new Patient("Bobrov", "Igor", "Mihaylovich", "Nezavisimosti 120, 12",
                     "+375296472390", 12112001))
                     .addPatient(new Patient("Petrov", "Nikita", "Alexandrovich", "Mavra 14, 23",
                             "+375442349065", 12112034, Diagnosis.SCOLIOSIS))
@@ -30,11 +32,11 @@ public class Main {
         PatientService service = new PatientService();
         ResultsPrinting show = new ResultsPrinting();
 
-        show.printAllPatients(dataBase.getPatients());
-        show.printFoundById(2, service.findPatientById(dataBase, 2));
-        show.printFoundByDiagnosis(Diagnosis.SCOLIOSIS.toString(), service.findAllByDiagnosis(dataBase, Diagnosis.SCOLIOSIS));
+        show.printAllPatients(hospital.getPatients());
+        show.printFoundById(2, service.findPatientById(hospital, 2));
+        show.printFoundByDiagnosis(Diagnosis.SCOLIOSIS.toString(), service.findAllByDiagnosis(hospital, Diagnosis.SCOLIOSIS));
         show.printFoundByMedicalRecordsInInterval(12111700, 12112040,
-                service.findAllByMedicalRecordsInInterval(dataBase, 12111700, 12112040));
-        show.printNumberOfPatientsWithoutDiagnosis(service.countPatientsWithoutDiagnosis(dataBase));
+                service.findAllByMedicalRecordsInInterval(hospital, 12111700, 12112040));
+        show.printNumberOfPatientsWithoutDiagnosis(service.countPatientsWithoutDiagnosis(hospital));
     }
 }

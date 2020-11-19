@@ -1,6 +1,6 @@
 package com.epam.patient.test.service;
 
-import com.epam.patient.entity.DataBase;
+import com.epam.patient.entity.Hospital;
 import com.epam.patient.entity.Diagnosis;
 import com.epam.patient.entity.Patient;
 import com.epam.patient.exception.ValidationException;
@@ -14,7 +14,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 
 public class PatientServiceTest {
-    DataBase dataBase = new DataBase();
+    Hospital hospital = new Hospital();
     PatientService service = new PatientService();
     Patient patient1, patient2, patient3, patient4, patient5, patient6;
 
@@ -32,7 +32,7 @@ public class PatientServiceTest {
                     "+375443895675", 12115678, Diagnosis.COVID_19);
             patient6 = new Patient("Pirova", "Diana", "Arkadyevna", "Rakassouskaga 12, 3",
                     "80336239812", 12111732);
-            dataBase.addPatient(patient1)
+            hospital.addPatient(patient1)
                     .addPatient(patient2)
                     .addPatient(patient3)
                     .addPatient(patient4)
@@ -48,7 +48,7 @@ public class PatientServiceTest {
         insertData();
 
         int expected = 2;
-        int actual = service.countPatientsWithoutDiagnosis(dataBase);
+        int actual = service.countPatientsWithoutDiagnosis(hospital);
 
         assertSame(expected, actual);
     }
@@ -57,7 +57,7 @@ public class PatientServiceTest {
     public void findPatientByIdTest() {
         insertData();
 
-        Patient actual = service.findPatientById(dataBase, 2);
+        Patient actual = service.findPatientById(hospital, 2);
         assertEquals(actual, patient2);
     }
 
@@ -68,7 +68,7 @@ public class PatientServiceTest {
         List<Patient> expected = new ArrayList<>();
         expected.add(patient2);
         expected.add(patient3);
-        List<Patient> actual = service.findAllByDiagnosis(dataBase, Diagnosis.SCOLIOSIS);
+        List<Patient> actual = service.findAllByDiagnosis(hospital, Diagnosis.SCOLIOSIS);
         assertEquals(actual, expected);
     }
 
@@ -81,7 +81,7 @@ public class PatientServiceTest {
         expected.add(patient2);
         expected.add(patient4);
         expected.add(patient6);
-        List<Patient> actual = service.findAllByMedicalRecordsInInterval(dataBase,
+        List<Patient> actual = service.findAllByMedicalRecordsInInterval(hospital,
                 12111700, 12112040);
         assertEquals(actual, expected);
     }

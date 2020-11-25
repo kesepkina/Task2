@@ -14,10 +14,17 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 
 public class PatientServiceTest {
-    Hospital hospital = new Hospital();
-    PatientService service = new PatientService();
+    Hospital hospital;
+    PatientService service;
     Patient patient1, patient2, patient3, patient4, patient5, patient6;
 
+    @BeforeClass
+    public void setUp() {
+        hospital = new Hospital();
+        service = new PatientService();
+    }
+
+    @BeforeClass
     private void insertData() {
         try {
             patient1 = new Patient("Bobrov", "Igor", "Mihaylovich", "Nezavisimosti 120, 12",
@@ -45,8 +52,7 @@ public class PatientServiceTest {
 
     @Test
     public void countPatientsWithoutDiagnosisTest() {
-        insertData();
-
+        
         int expected = 2;
         int actual = service.countPatientsWithoutDiagnosis(hospital);
 
@@ -55,7 +61,6 @@ public class PatientServiceTest {
 
     @Test
     public void findPatientByIdTest() {
-        insertData();
 
         Patient actual = service.findPatientById(hospital, 2);
         assertEquals(actual, patient2);
@@ -63,7 +68,6 @@ public class PatientServiceTest {
 
     @Test
     public void findAllByDiagnosisTest() {
-        insertData();
 
         List<Patient> expected = new ArrayList<>();
         expected.add(patient2);
@@ -74,7 +78,6 @@ public class PatientServiceTest {
 
     @Test
     public void findAllByMedicalRecordsInInterval() {
-        insertData();
 
         List<Patient> expected = new ArrayList<>();
         expected.add(patient1);
